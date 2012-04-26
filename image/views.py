@@ -53,16 +53,14 @@ def image_handler(files, request):
 
 @login_required
 def upload(request):
+    fileCount = 0
     if request.method == 'GET':
         return render_to_response('upload.html', {'url': request.GET.get('url', ''),}, context_instance=RequestContext(request))
     elif request.method == 'POST':
-        tmp = tempfile.mkstemp()
-        fext = ""
-        orig = ""
-
         if request.POST['upload_type'] == 'file':
             for files in request.FILES.getlist('upload_file'):
                 image_handler(files, request)
+                fileCount += 1
         elif request.POST['upload_type'] == 'url':
             remote_image = urllib2.urlopen(request.POST['upload_url'])
             data = remote_image.read()
@@ -73,7 +71,10 @@ def upload(request):
             f = os.fdopen(tmp[0], "wb+")
             f.write(data)
             f.close()
-    return render_to_response('upload.html', {'url': request.GET.get('url', ''),}, context_instance=RequestContext(request))
+    return render_to_response('list_images.html',
+            {'images': Image.objects.order_by('-base62')[:fileCount],
+             'settings': settings},
+             context_instance=RequestContext(request))
 
 @login_required
 def view_image(request, id):
