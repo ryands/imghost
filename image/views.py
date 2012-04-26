@@ -72,7 +72,7 @@ def upload(request):
             f.write(data)
             f.close()
     return render_to_response('list_images.html',
-            {'images': Image.objects.order_by('-base62')[:fileCount],
+            {'images': Image.objects.order_by('-id')[:fileCount],
              'settings': settings},
              context_instance=RequestContext(request))
 
