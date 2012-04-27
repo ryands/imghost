@@ -87,7 +87,7 @@ def view_image(request, id):
 def list_images(request, page=0):
     return render_to_response('list_images.html', 
             { 'page':page, 
-              'images': Image.objects.all(), 
+              'images': Image.objects.order_by('id'), 
               'settings': settings},
             context_instance=RequestContext(request))
 
