@@ -14,7 +14,7 @@
      </div>
 
      <ul class="unstyled">
-       <li>orig: {{ image.orig_filename }}</li>
+       <li>orig: {{ image.orig_filename|slice:":16" }}</li>
        <li>user: {{ image.uploader.username }}</li>
        <li>url: <input type="text" value="{{ settings.MEDIA_URL }}{{image.filename}}" class="input-small" /></li>
        <li><a href="http://api.imgur.com/2/upload?url={{ settings.MEDIA_URL }}{{image.filename}}">Imgur Mirror</a></li>
