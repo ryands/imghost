@@ -18,13 +18,22 @@ import settings
 def image_handler(files, request):
     tmp = tempfile.mkstemp()
     md5 = hashlib.md5()
-    orig = files.name
-    fext = orig[orig.rfind('.')+1:]
-    f = os.fdopen(tmp[0], "wb+")
-    for chunk in files.chunks():
-        f.write(chunk)
-        md5.update(chunk)
-    f.close()
+    if request.POST['upload_type'] == 'file':
+        orig = files.name
+        fext = orig[orig.rfind('.')+1:]
+        f = os.fdopen(tmp[0], "wb+")
+        for chunk in files.chunks():
+            f.write(chunk)
+            md5.update(chunk)
+        f.close()
+    elif request.POST['upload_type'] == 'url':
+        md5.update(files)
+        fext = request.POST['upload_url'][-3:]
+        orig = request.POST['upload_url']
+                                            
+        f = os.fdopen(tmp[0], "wb+")
+        f.write(files)
+        f.close()
 
     img = Image()
     try:
@@ -62,15 +71,11 @@ def upload(request):
                 image_handler(files, request)
                 fileCount += 1
         elif request.POST['upload_type'] == 'url':
-            remote_image = urllib2.urlopen(request.POST['upload_url'])
+            upload_url = request.POST['upload_url']
+            remote_image = urllib2.urlopen(upload_url)
             data = remote_image.read()
-            md5.update(data)
-            fext = request.POST['upload_url'][-3:]
-            orig = request.POST['upload_url']
-            
-            f = os.fdopen(tmp[0], "wb+")
-            f.write(data)
-            f.close()
+            image_handler(data, request)
+            fileCount += 1
     return render_to_response('list_images.html',
             {'images': Image.objects.order_by('-id')[:fileCount],
              'settings': settings},

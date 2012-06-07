@@ -26,5 +26,6 @@ if settings.DEBUG:
   urlpatterns += patterns('',
     (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT,}),
     (r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT,}),
+    (r'^(?P<path>thumbs/.*\.(?:jpg|png|gif))$', 'django.views.static.serve', {'document_root':settings.MEDIA_ROOT,}),
+    (r'^(?P<path>.*\.(?:jpg|png|gif))$', 'django.views.static.serve', {'document_root':settings.MEDIA_ROOT,}),
   )
-

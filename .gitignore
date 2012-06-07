@@ -1,4 +1,5 @@
 local_settings.py
+data/
 data/thumbs/*
 data/*.jpg
 data/*.png
