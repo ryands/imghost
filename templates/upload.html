@@ -20,7 +20,7 @@
 			<form name="file_form" method="post" action="/upload" enctype="multipart/form-data">
 			{% csrf_token %}
 			<div id="fileinput" class="" style="text-align:center;">
-			  <input type="file" name="upload_file" />
+			  <input type="file" name="upload_file" multiple="multiple" />
 			 <!--  <div style="display:none;"><input type="text" name="upload_url" value="{{url}}" size="64" /></div> -->
 			  <br />
 			  <input type="submit" value="Upload" class="btn primary" />
